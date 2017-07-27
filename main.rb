@@ -3,14 +3,14 @@ require 'fileutils'
 require_relative 'config'
 
 def install(package)
-    if isDownloaded?(package)
+    if is_downloaded?(package)
         puts "#{package} already installed!"     
     else
-        pkg = fetch(package) 
+        fetch(package)
     end
 end
 
-def isDownloaded?(package)
+def is_downloaded?(package)
     if File.directory?("Storeroom/#{package}")
         return true
     end
@@ -21,7 +21,7 @@ def fetch(package)
     puts "Fetching #{package}"
     FileUtils.mkdir_p("Storeroom/#{package}")
     tap = File.open("Storeroom/#{package}/#{package}.keg", "w")
-    tap << open("http://google.com.au").read
+    tap << open("https://storage.googleapis.com/tavernlibrary/#{package}.keg").read
     tap.close
     puts "Done"
 end
@@ -30,4 +30,4 @@ def pour(package)
     # build a package
 end
 
-install("samplepackage")
+install("testpackage")
