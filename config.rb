@@ -1,4 +1,5 @@
 module Config
+    # turn the config file into a series of hashed values, treat $ as comment
     def Config.parse(source) 
         settings = Hash.new
         source.each_line do |line|
