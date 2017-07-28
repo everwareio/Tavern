@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'fileutils'
+require 'json'
 require_relative 'config'
 
 command, target, *flags = ARGV
@@ -39,9 +40,15 @@ def fetch(package)
     end
 end
 
-# builds a package and links it to the PATH
+# builds a package according to the package install instruction
 def pour(package)
-    
+    kegfile = File.open("Storeroom/#{package}/#{package}.keg", "r").read
+    keg = JSON.parse(kegfile)
+    Dir.chdir("Storeroom/#{package}/") do
+        keg['install'].each do |line|
+            system line
+        end
+    end
 end
 
 # fetches a keg and pours it
@@ -50,6 +57,7 @@ def install(package)
         puts "#{package} already installed!"     
     else
         fetch(package)
+        pour(package)
     end
 end
 
@@ -58,6 +66,8 @@ if command == "install"
     install(target)
 elsif command == "uninstall"
     uninstall(target)
+elsif command == "link"
+    pour(target)
 end
 
 # newline for readability
