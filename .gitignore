@@ -1,3 +1,4 @@
 # here just in case we need to lock some files out
-/Storeroom/
+Storeroom/
 Tavern.config
+.vscode/
