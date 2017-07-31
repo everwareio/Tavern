@@ -6,15 +6,20 @@ command, target, *flags = ARGV
 config_file = File.open("Tavern.config")
 config = Config.parse(config_file)
 
+# cancel if no arguments are given
+if ARGV.length <= 2
+  abort "Not enough arguments"
+end
+
 # run the program based on the arguments
 if command == "install"
-    Core.install(target, config)
+  Core.install(target, config)
 elsif command == "uninstall"
-    Core.uninstall(target)
+  Core.uninstall(target)
 elsif command == "pour"
-    Core.pour(target, config)
+  Core.pour(target, config)
 else
-    puts "Unknown command #{command}"
+  puts "Unknown command #{command}"
 end
 
 # print an extra line for readability
