@@ -57,6 +57,31 @@ module Core
     end
   end
 
+  # updates a package
+  def self.update(package, config)
+    if self.is_downloaded?(package)
+      currentkegfile = File.open("Storeroom/#{package}/#{package}.keg", "r").read
+      currentkeg = JSON.parse(currentkegfile)
+      puts "Local version: #{currentkeg['version']}"
+      serverkegfile = open("https://storage.googleapis.com/tavernlibrary/#{package}_#{config['os']}.keg").read
+      serverkeg = JSON.parse(serverkegfile)
+      puts "Server version: #{serverkeg['version']}"
+      if serverkeg['version'] != currentkeg['version']
+        puts "Updating"
+        self.uninstall(package)
+        self.install(package, config)
+      else
+        puts "No update required"
+      end
+    else
+      puts "Package not found, install? (y/n)"
+      response = gets
+      if response.downcase == "y"
+        self.install(package, config)
+      end
+    end
+  end
+
   # installs a package
   def self.install(package, config)
     if is_downloaded?(package)

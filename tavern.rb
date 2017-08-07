@@ -16,6 +16,8 @@ if command == "install"
   Core.install(target, config)
 elsif command == "uninstall"
   Core.uninstall(target)
+elsif command == "update"
+  Core.update(target, config)
 else
   puts "Unknown command #{command}"
 end
