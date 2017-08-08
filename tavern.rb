@@ -1,5 +1,6 @@
 require './core'
 require './config'
+require './kegbuilder'
 
 # get the arguments, and the configuration information
 argc = ARGV.length
@@ -16,6 +17,8 @@ elsif command == "update"
   Core.update(target, config)
 elsif command == "info"
   Core.info()
+elsif command == "create"
+  Kegbuilder.create()
 else
   puts "Unknown command #{command}"
 end
