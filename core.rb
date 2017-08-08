@@ -82,12 +82,25 @@ module Core
     end
   end
 
+  # gets all the installed packages
+  def self.info()
+    menu = File.open("Storeroom/installed.menu", "r")
+    menu.each_line do |package|
+      kegfile = File.open("Storeroom/#{package}/#{package}.keg", "r").read
+      keg = JSON.parse(kegfile)
+      puts "#{keg['name']}, version: #{keg['version']}"
+    end
+  end
+
   # installs a package
   def self.install(package, config)
     if is_downloaded?(package)
       puts "#{package} already installed!"
     else
       fetch(package, config)
+      menu = File.open("Storeroom/installed.menu", "a")
+      menu << "#{package}"
+      menu.close
       pour(package, config)
     end
   end
