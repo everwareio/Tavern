@@ -20,14 +20,16 @@ module Core
     puts "Fetching #{package}"
     begin
       tap = open("https://storage.googleapis.com/tavernlibrary/#{package}_#{config['os']}.keg").read
+    rescue
+      puts "Could not find a #{package} package for your operating system"
+      return false
+    else
       FileUtils.mkdir_p("#{@thispath}/Storeroom/#{package}")
       keg = File.open("#{@thispath}/Storeroom/#{package}/#{package}.keg", "w")
       keg << tap
       keg.close
-    rescue
-      puts "Could not find a #{package} package for your operating system"
-    else
       puts "Finished"
+      return true
     end
   end
 
@@ -109,11 +111,12 @@ module Core
     if is_downloaded?(package)
       puts "#{package} already installed!"
     else
-      fetch(package, config)
-      menu = File.open("#{@thispath}/Storeroom/installed.menu", "a")
-      menu << "#{package}"
-      menu.close
-      pour(package, config)
+      if self.fetch(package, config)
+        menu = File.open("#{@thispath}/Storeroom/installed.menu", "a")
+        menu << "#{package}"
+        menu.close
+        self.pour(package, config)
+      end
     end
   end
 end
