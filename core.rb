@@ -17,7 +17,7 @@ module Core
 
   # attempts to download and install a package
   def self.fetch(package, config)
-    puts "Fetching #{package}"
+    puts "Fetching '#{package}'"
     begin
       tap = open("https://storage.googleapis.com/tavernlibrary/#{package}_#{config['os']}.keg").read
     rescue
@@ -28,7 +28,7 @@ module Core
       keg = File.open("#{@thispath}/Storeroom/#{package}/#{package}.keg", "w")
       keg << tap
       keg.close
-      puts "Finished"
+      puts "Done!"
       return true
     end
   end
@@ -37,6 +37,7 @@ module Core
   def self.pour(package, config)
     kegfile = File.open("#{@thispath}/Storeroom/#{package}/#{package}.keg", "r").read
     keg = JSON.parse(kegfile)
+    puts "Installing..."
     Dir.chdir("#{@thispath}/Storeroom/#{package}/") do
       keg['build'].each do |line|
         system line
@@ -116,6 +117,7 @@ module Core
         menu << "#{package}"
         menu.close
         self.pour(package, config)
+        puts "Package #{package} is installed!"
       end
     end
   end
