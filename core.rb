@@ -19,7 +19,7 @@ module Core
   def self.fetch(package, config)
     puts "Fetching '#{package}'"
     begin
-      tap = open("https://storage.googleapis.com/tavernlibrary/#{package}_#{config['os']}.keg").read
+      tap = open("#{config['lib']}/#{package}_#{config['os']}.keg").read
     rescue
       puts "Could not find a #{package} package for your operating system"
       return false
@@ -77,7 +77,7 @@ module Core
       currentkeg = JSON.parse(currentkegfile)
       currentkegfile.close
       puts "Local version: #{currentkeg['version']}"
-      serverkegfile = open("https://storage.googleapis.com/tavernlibrary/#{package}_#{config['os']}.keg").read
+      serverkegfile = open("#{config['lib']}/#{package}_#{config['os']}.keg").read
       serverkeg = JSON.parse(serverkegfile)
       serverkegfile.close
       puts "Server version: #{serverkeg['version']}"
