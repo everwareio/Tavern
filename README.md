@@ -14,6 +14,11 @@ $ tavern uninstall <package_name>
 
 Tavern will search its library for a package with that name, and matching your operating system; and when found, attempt to install it, as instructed by the author.
 
+Packages can so be installed locally, by adding the `-l` flag at the end of the install command. Note that the flag MUST be at the end, like so:
+```
+$ tavern install <package_name> -l
+```
+
 ### Configuration
 The most critical file for Tavern is the `.tavernconfig` file. From it you can set the variables you need to make your Tavern client tick. In the name of simplicity, there are only two. You can indicate comments with a `$` sign, and variables are assigned with an `=`. Tavern configuration files are on a per directory basis, and Tavern will read the `.tavernconfig` from wherever is is executed from, this allows for different libraries to be referenced on a per project basis. Here is an example of a Tavern config:
 
