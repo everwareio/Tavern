@@ -4,28 +4,25 @@ require 'json'
 require 'tempfile'
 
 module Core
-  #the path to this file
-  @thispath = File.dirname(__FILE__)
-
   # checks whether or not a package has already been downloaded
   def self.is_downloaded?(package)
-    if File.directory?("Storeroom/#{package}")
+    if File.directory?("#{$thispath}/Storeroom/#{package}")
       return true
     end
     return false
   end
 
   # attempts to download and install a package
-  def self.fetch(package, config)
+  def self.fetch(package, libraryurl, os)
     puts "Fetching '#{package}'"
     begin
-      tap = open("#{config['lib']}/#{package}_#{config['os']}.keg").read
+      tap = open("#{libraryurl}/#{package}_#{os}.keg").read
     rescue
       puts "Could not find a #{package} package for your operating system"
       return false
     else
-      FileUtils.mkdir_p("#{@thispath}/Storeroom/#{package}")
-      keg = File.open("#{@thispath}/Storeroom/#{package}/#{package}.keg", "w")
+      FileUtils.mkdir_p("#{$thispath}/Storeroom/#{package}")
+      keg = File.open("#{$thispath}/Storeroom/#{package}/#{package}.keg", "w")
       keg << tap
       keg.close
       puts "Done!"
@@ -34,11 +31,11 @@ module Core
   end
 
   # builds a package according to the package install instructions
-  def self.pour(package, config)
-    kegfile = File.open("#{@thispath}/Storeroom/#{package}/#{package}.keg", "r").read
+  def self.pour(package)
+    kegfile = File.open("#{$thispath}/Storeroom/#{package}/#{package}.keg", "r").read
     keg = JSON.parse(kegfile)
     puts "Installing..."
-    Dir.chdir("#{@thispath}/Storeroom/#{package}/") do
+    Dir.chdir("#{$thispath}/Storeroom/#{package}/") do
       keg['build'].each do |line|
         system line
       end
@@ -52,32 +49,32 @@ module Core
   # removes a package from the Storeroom
   def self.uninstall(package)
     if self.is_downloaded?(package)
-      kegfile = File.open("#{@thispath}/Storeroom/#{package}/#{package}.keg", "r").read
+      kegfile = File.open("#{$thispath}/Storeroom/#{package}/#{package}.keg", "r").read
       keg = JSON.parse(kegfile)
-      Dir.chdir("#{@thispath}/Storeroom/#{package}/") do
+      Dir.chdir("#{$thispath}/Storeroom/#{package}/") do
         keg['uninstall'].each do |line|
           system line
         end
       end
-      FileUtils.remove_dir("#{@thispath}/Storeroom/#{package}")
+      FileUtils.remove_dir("#{$thispath}/Storeroom/#{package}")
       temp = Tempfile.new("kegs")
-      File.open("#{@thispath}/Storeroom/installed.menu", 'r').each do |line|
+      File.open("#{$thispath}/Storeroom/installed.menu", 'r').each do |line|
         temp << line unless line.chomp == package
       end
       temp.close
-      FileUtils.mv(temp.path, "#{@thispath}/Storeroom/installed.menu")
+      FileUtils.mv(temp.path, "#{$thispath}/Storeroom/installed.menu")
       puts "#{package.capitalize} uninstalled"
     end
   end
 
   # updates a package
-  def self.update(package, config)
+  def self.update(package, libraryurl, os)
     if self.is_downloaded?(package)
-      currentkegfile = File.open("#{@thispath}/Storeroom/#{package}/#{package}.keg", "r").read
+      currentkegfile = File.open("#{$thispath}/Storeroom/#{package}/#{package}.keg", "r").read
       currentkeg = JSON.parse(currentkegfile)
       currentkegfile.close
       puts "Local version: #{currentkeg['version']}"
-      serverkegfile = open("#{config['lib']}/#{package}_#{config['os']}.keg").read
+      serverkegfile = open("#{libraryurl}/#{package}_#{os}.keg").read
       serverkeg = JSON.parse(serverkegfile)
       serverkegfile.close
       puts "Server version: #{serverkeg['version']}"
@@ -99,24 +96,24 @@ module Core
 
   # gets all the installed packages
   def self.info()
-    menu = File.open("#{@thispath}/Storeroom/installed.menu", "r")
+    menu = File.open("#{$thispath}/Storeroom/installed.menu", "r")
     menu.each_line do |package|
-      kegfile = File.open("#{@thispath}/Storeroom/#{package}/#{package}.keg", "r").read
+      kegfile = File.open("#{$thispath}/Storeroom/#{package}/#{package}.keg", "r").read
       keg = JSON.parse(kegfile)
       puts "#{keg['name']}, version: #{keg['version']}"
     end
   end
 
   # installs a package
-  def self.install(package, config)
+  def self.install(package, libraryurl, os)
     if is_downloaded?(package)
       puts "#{package} already installed!"
     else
-      if self.fetch(package, config)
-        menu = File.open("#{@thispath}/Storeroom/installed.menu", "a")
+      if self.fetch(package, libraryurl, os)
+        menu = File.open("#{$thispath}/Storeroom/installed.menu", "a")
         menu << "#{package}"
         menu.close
-        self.pour(package, config)
+        self.pour(package)
         puts "Package #{package} is installed!"
       end
     end

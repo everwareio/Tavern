@@ -1,0 +1,5 @@
+$ record what operating system this Tavern instance is running on
+os = darwin
+
+$ record which library we are downloading from
+lib = https://storage.googleapis.com/tavernlibrary

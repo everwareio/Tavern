@@ -19,7 +19,7 @@ Tavern will search its library for a package with that name, and matching your o
 
 ### Configuration
 
-The most critical file for Tavern is the `Tavern.config` file. From it you can set the variables you need to make your Tavern client tick. In the name of simplicity, there are only two. You can indicate comments with a `$` sign, and variables are assigned with an `=`. Here is an example:
+The most critical file for Tavern is the `.tavernconfig` file. From it you can set the variables you need to make your Tavern client tick. In the name of simplicity, there are only two. You can indicate comments with a `$` sign, and variables are assigned with an `=`. Here is an example:
 
 ```
 $ tell tavern what operating system it's running on (win for Windows, darwin for OSX)
@@ -31,35 +31,7 @@ lib = https://storage.googleapis.com/tavernlibrary
 ```
 
 ### Creating your own Library
-Creating your own Tavern library is simple, all you need is a file host willing to expose a directory like structure to the Internet, and to upload keg files (we'll get to those in a moment) to and you're done. To use your library, set the `lib` variable in the `Tavern.config` file to point to your URL and now your client will download from there.
-
-### Creating your own packages
-Creating packages in Tavern is possible, but the way that packages are handled is liable to change soon, as we try various methods, to make it as easy as possible for everyone. Currently, packages are called Kegs, and are stored in a JSON format like so:
-
-```
-{
-    // the name of the package,
-    "name": "example_package",
-
-    // the version
-       "version": "1.0.0",
-
-    // a series of bash or batch commands to download and build your package
-    // this is run before the install commands
-    "build": []
-
-    // a series of bash or batch commands to install your built package; these should
-    // also link the file to PATH if that's necessary
-    "install": []
-
-    // a series of bash or batch commands to uninstall your package
-    "uninstall": []
-}
-```
-
-We figured that it's probably not super fun to have to remember that structure, so you can use the `tavern create` command to have a nice series of prompts that will guide you through creating a keg.
-
-Note that this is likely to change as we try to come up with a more elegant and simple cross platform solution, but should be stable for a little while.
+Creating your own Tavern library is simple, all you need is a file host willing to expose a directory like structure to the Internet, and to upload keg files (we'll get to those in a moment) to and you're done. To use your library, set the `lib` variable in the `.tavernconfig` file to point to your URL and now your client will download from there.
 
 ### Other commands
 `tavern update <package_name>` will check if the keg stored in the library has a different version to the one installed locally, and if it does, will remove and reinstall the new one.
