@@ -1,5 +1,5 @@
 # here just in case we need to lock some files out
 Storeroom/
-Tavern.config
+.tavernconfig
 .vscode/
 *.keg
