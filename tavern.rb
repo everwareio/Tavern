@@ -5,24 +5,24 @@ $taverndir = File.dirname(__FILE__)
 require "#{$taverndir}/core"
 require "#{$taverndir}/config"
 
-# get the arguments, and the configuration information
-argc = ARGV.length
-command, target, *flags = ARGV
+# get the configuration information
 Config.parse()
 
-# run the program based on the arguments
-if command == "install"
-  Core.install(target, Config.get('lib'), Config.get('os'))
-elsif command == "uninstall"
-  Core.uninstall(target)
-elsif command == "update"
-  Core.update(target, Config.get('lib'), Config.get('os'))
-elsif command == "info"
+# run the program based on the ARGV
+if ARGV[0] == "install"
+  Core.install(ARGV[1], Config.get('lib'), Config.get('os'))
+elsif ARGV[0] == "uninstall"
+  Core.uninstall(ARGV[1])
+elsif ARGV[0] == "update"
+  Core.update(ARGV[1], Config.get('lib'), Config.get('os'))
+elsif ARGV[0] == "info"
   Core.info()
-elsif command == "config"
-  puts Config.set(target, "blah")
-else
-  puts "Unknown command #{command}"
+elsif ARGV[0] == "config"
+  if ARGV[1] == "set"
+    Config.set(ARGV[2], ARGV[3])
+  elsif ARGV[1] == "get"
+    puts Config.get(ARGV[2])
+  end
 end
 
 # print an extra line for readability
