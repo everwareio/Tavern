@@ -10,9 +10,17 @@ Config.parse()
 
 # run the program based on the ARGV
 if ARGV[0] == "install"
-  Core.install(ARGV[1], Config.get('lib'), Config.get('os'))
+  if ARGV[2] == "-l"
+    Core.install_local(ARGV[1], Config.get('lib'), Config.get('os'))
+  else
+    Core.install(ARGV[1], Config.get('lib'), Config.get('os'))
+  end
 elsif ARGV[0] == "uninstall"
-  Core.uninstall(ARGV[1])
+  if ARGV[2] == "-l"
+    Core.uninstall_local(ARGV[1])
+  else
+    Core.uninstall(ARGV[1])
+  end
 elsif ARGV[0] == "update"
   Core.update(ARGV[1], Config.get('lib'), Config.get('os'))
 elsif ARGV[0] == "info"
