@@ -30,7 +30,7 @@ module Config
       if line.length > 1 and line[0] != "$"
         values = line.split('=')
         if values[0].strip == option
-          temp << "#{values[0].strip} = #{newvalue}"
+          temp << "#{values[0].strip} = #{newvalue}\n"
         else
           temp << line
         end
