@@ -20,7 +20,7 @@ elsif command == "update"
 elsif command == "info"
   Core.info()
 elsif command == "config"
-  puts Config.get(target)
+  puts Config.set(target, "blah")
 else
   puts "Unknown command #{command}"
 end

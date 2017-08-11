@@ -58,7 +58,7 @@ module Core
       end
       FileUtils.remove_dir("#{$taverndir}/Storeroom/#{package}")
       temp = Tempfile.new("kegs")
-      File.open("#{$taverndir}/Storeroom/installed.menu", 'r').each do |line|
+      File.open("#{$taverndir}/Storeroom/installed.menu", 'r').each_line do |line|
         temp << line unless line.chomp == package
       end
       temp.close

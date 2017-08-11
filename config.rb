@@ -1,3 +1,5 @@
+require 'tempfile'
+
 module Config
   @configsettings = Hash.new
 
@@ -19,5 +21,24 @@ module Config
     else
       return "Setting not found"
     end
+  end
+
+  # updates a line in the config file
+  def self.set(option, newvalue)
+    temp = Tempfile.new("tavernconfig")
+    File.open("#{$taverndir}/.tavernconfig").each_line do |line|
+      if line.length > 1 and line[0] != "$"
+        values = line.split('=')
+        if values[0].strip == option
+          temp << "#{values[0].strip} = #{newvalue}"
+        else
+          temp << line
+        end
+      else
+        temp << line
+      end
+    end
+    temp.close
+    FileUtils.mv(temp.path, "#{$taverndir}/.tavernconfig")
   end
 end
