@@ -70,12 +70,12 @@ module Core
   # updates a package
   def self.update(package, libraryurl, os)
     if self.is_downloaded?(package)
-      currentkegfile = File.open("#{$taverndir}/Storeroom/#{package}/#{package}.keg", "r").read
-      currentkeg = JSON.parse(currentkegfile)
+      currentkegfile = File.open("#{$taverndir}/Storeroom/#{package}/#{package}.keg", "r")
+      currentkeg = JSON.parse(currentkegfile.read)
       currentkegfile.close
       puts "Local version: #{currentkeg['version']}"
-      serverkegfile = open("#{libraryurl}/#{package}_#{os}.keg").read
-      serverkeg = JSON.parse(serverkegfile)
+      serverkegfile = open("#{libraryurl}/#{package}_#{os}.keg")
+      serverkeg = JSON.parse(serverkegfile.read)
       serverkegfile.close
       puts "Server version: #{serverkeg['version']}"
       if serverkeg['version'] != currentkeg['version']
@@ -98,10 +98,12 @@ module Core
   def self.info()
     menu = File.open("#{$taverndir}/Storeroom/installed.menu", "r")
     menu.each_line do |package|
-      kegfile = File.open("#{$taverndir}/Storeroom/#{package}/#{package}.keg", "r").read
-      keg = JSON.parse(kegfile)
+      kegfile = File.open("#{$taverndir}/Storeroom/#{package.strip}/#{package.strip}.keg", "r")
+      keg = JSON.parse(kegfile.read)
+      kegfile.close
       puts "#{keg['name']}, version: #{keg['version']}"
     end
+    menu.close
   end
 
   # installs a package
@@ -111,7 +113,7 @@ module Core
     else
       if self.fetch(package, libraryurl, os)
         menu = File.open("#{$taverndir}/Storeroom/installed.menu", "a")
-        menu << "#{package}"
+        menu << "#{package}\n"
         menu.close
         self.pour(package)
         puts "Package #{package} is installed!"
