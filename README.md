@@ -31,6 +31,9 @@ Creating your own Tavern library is simple, all you need is a file host willing 
 
 ### Other commands
 `tavern update <package_name>` will check if the keg stored in the library has a different version to the one installed locally, and if it does, will remove and reinstall the new one.
+
 `tavern info` will list all the installed packages and their versions.
-`tavern config get <setting>` will print the value of the setting
-`tavern config set <setting>` will set the value of the setting
+
+`tavern config get <setting>` will print the value of the setting.
+
+`tavern config set <setting>` will set the value of the setting.
