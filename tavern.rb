@@ -1,9 +1,9 @@
 # Globals are bad practice, but this is required
 # for Tavern to function the way it does.
-$thispath = File.dirname(__FILE__)
+$taverndir = File.dirname(__FILE__)
 
-require "#{$thispath}/core"
-require "#{$thispath}/config"
+require "#{$taverndir}/core"
+require "#{$taverndir}/config"
 
 # get the arguments, and the configuration information
 argc = ARGV.length
