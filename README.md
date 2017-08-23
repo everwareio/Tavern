@@ -20,25 +20,24 @@ $ tavern install <package_name> -l
 ```
 
 ### Configuration
-The most critical file for Tavern is the `.tavernconfig` file. From it you can set the variables you need to make your Tavern client tick. In the name of simplicity, there are only two. You can indicate comments with a `$` sign, and variables are assigned with an `=`. Tavern configuration files are on a per directory basis, and Tavern will read the `.tavernconfig` from wherever is is executed from, this allows for different libraries to be referenced on a per project basis. Here is an example of a Tavern config:
+The most critical file for Tavern is the `.tavernconfig` file. From it you can set the variables you need to make your Tavern client tick. To set or get settings in your instance of Tavern, use the 'config' command set:
 
-```
-$ tell tavern what operating system it's running on (win for Windows, darwin for OSX)
-os = win
+`tavern config set <setting> <value>` will set the value of the specified setting to the given value
 
-$ tell tavern what library we are pulling from (the default is the stock Everware Tavern Library)
-$ which is full of useful test and example packages to download
-lib = https://storage.googleapis.com/tavernlibrary
-```
+`tavern config get <setting>` will print the current value of the setting
 
-### Creating your own Library
-Creating your own Tavern library is simple, all you need is a file host willing to expose a directory like structure to the Internet, and to upload keg files (we'll get to those in a moment) to and you're done. To use your library, set the `lib` variable in the `.tavernconfig` file to point to your URL and now your client will download from there.
+### Taps
+Taps represent the libraries of packages that Tavern can pull from. You can have as many taps as you want, and swap between them quickly. These taps are simply different URL's your Tavern instance looks for packages in and downloads them from. To interact with taps, use the 'tap' command set:
+
+`tavern tap add <name> <url>` will add a tap to Tavern with the given name, and url.
+
+`tavern tap remove <name>` will remove the named tap from Tavern
+
+`tavern tap pour <name>` will make the named tap the one that Tavern pulls from and attempts to download files from
+
+`tavern tap list` will list all the taps you have added to Tavern (with the URL's)
 
 ### Other commands
 `tavern update <package_name>` will check if the keg stored in the library has a different version to the one installed locally, and if it does, will remove and reinstall the new one.
 
 `tavern info` will list all the installed packages and their versions.
-
-`tavern config get <setting>` will print the value of the setting.
-
-`tavern config set <setting>` will set the value of the setting.

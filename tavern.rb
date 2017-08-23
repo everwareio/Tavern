@@ -36,18 +36,26 @@ elsif ARGV[0] == "tap"
     Config.set("tapnames", Config.get("tapnames") + "," + ARGV[2])
     Config.set("tapuris", Config.get("tapuris") + "," + ARGV[3])
   elsif ARGV[1] == "remove"
+    removedtap = false
     taps = Config.get("tapnames").split(",")
     uris = Config.get("tapuris").split(",")
     taps.each_with_index do |tap, index|
       if tap == ARGV[2]
         taps.delete_at(index)
         uris.delete_at(index)
+        removedtap = true
       end
     end
     Config.set("tapnames", taps.join(","))
     Config.set("tapuris", uris.join(","))
+    puts "Tap '#{ARGV[2]}' not found" unless removedtap 
   elsif ARGV[1] == "pour"
-    Config.set("thistap", ARGV[2])
+    taps = Config.get("tapnames").split(",")
+    if taps.include? ARGV[2]
+      Config.set("thistap", ARGV[2])
+    else
+      puts "Tap '#{ARGV[2]}' not in tap list, make sure you have added it"
+    end
   elsif ARGV[1] == "list"
     taps = Config.get("tapnames").split(",")
     uris = Config.get("tapuris").split(",")
