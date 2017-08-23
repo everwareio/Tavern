@@ -26,7 +26,7 @@ module Config
   # updates a line in the config file
   def self.set(option, newvalue)
     temp = Tempfile.new("tavernconfig")
-    File.open("#{$taverndir}/.tavernconfig").each_line do |line|
+    File.open("#{$taverndir}/.tavernconfig").read.each_line do |line|
       if line.length > 1 and line[0] != "$"
         values = line.split('=')
         if values[0].strip == option
@@ -39,6 +39,6 @@ module Config
       end
     end
     temp.close
-    FileUtils.mv(temp.path, "#{$taverndir}/.tavernconfig")
+    FileUtils.cp_r(temp.path, "#{$taverndir}/.tavernconfig")
   end
 end
