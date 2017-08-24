@@ -1,9 +1,6 @@
 require 'open-uri'
 require 'fileutils'
 
-# regex to isolate strings
-# enviroment_var = / \$\(([A-Z]+)\)/
-
 # parses kegs
 module KegParser
   # expand special variables into full paths
@@ -143,6 +140,7 @@ module KegExecutor
     while count <= argc.to_i do
       if os == "win"
         command += "%#{count}"
+        command = "@echo off\n" + command
       elsif os == "darwin"
         command += "$#{count}"
       end
