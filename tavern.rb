@@ -1,6 +1,6 @@
 # Globals are bad practice, but this is required
 # for Tavern to function the way it does.
-$taverndir = File.dirname(__FILE__)
+$taverndir = __dir__
 
 require "#{$taverndir}/core"
 require "#{$taverndir}/config"
@@ -10,21 +10,13 @@ Config.parse()
 
 # run the program based on the ARGV
 if ARGV[0] == "install"
-  if ARGV[2] == "-l"
-    Core.install_local(ARGV[1], Config.get('thistap'), Config.get('os'))
-  else
-    Core.install(ARGV[1], Config.get('thistap'), Config.get('os'))
-  end
+  Core.install(ARGV[1], Config.get('thisuri'), Config.get('os'))
 elsif ARGV[0] == "uninstall"
-  if ARGV[2] == "-l"
-    Core.uninstall_local(ARGV[1])
-  else
-    Core.uninstall(ARGV[1])
-  end
+  Core.uninstall(ARGV[1], Config.get('os'))
 elsif ARGV[0] == "update"
-  Core.update(ARGV[1], Config.get('thistap'), Config.get('os'))
+  Core.update(ARGV[1], Config.get('thisuri'), Config.get('os'))
 elsif ARGV[0] == "info"
-  Core.info()
+  Core.info(Config.get('os'))
 elsif ARGV[0] == "config"
   if ARGV[1] == "set"
     Config.set(ARGV[2], ARGV[3])
@@ -51,8 +43,10 @@ elsif ARGV[0] == "tap"
     puts "Tap '#{ARGV[2]}' not found" unless removedtap 
   elsif ARGV[1] == "pour"
     taps = Config.get("tapnames").split(",")
+    uris = Config.get("tapuris").split(",")
     if taps.include? ARGV[2]
       Config.set("thistap", ARGV[2])
+      Config.set("thisuri", uris[taps.index(ARGV[2])])
     else
       puts "Tap '#{ARGV[2]}' not in tap list, make sure you have added it"
     end
@@ -63,7 +57,7 @@ elsif ARGV[0] == "tap"
       puts "#{name} (#{uris[index]})"
     end
   elsif ARGV[1] == "current" 
-    puts Config.get("thistap")
+    puts "#{Config.get("thistap")} (#{Config.get("thisuri")})"
   end
 end
 

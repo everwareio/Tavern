@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'fileutils'
+$taverndir = __dir__
 
 # parses kegs
 module KegParser
@@ -9,12 +10,12 @@ module KegParser
       win: {
         HOME: "C:",
         EVERWARE: "C:/EverwareIO",
-        PACKAGE: "C:/EverwareIO/Tavern/Storeroom/#{name}"
+        PACKAGE: "#{$taverndir}/Storeroom/#{name}"
       },
       darwin: {
         HOME: "~",
         EVERWARE: "~/everware",
-        PACKAGE: "~/everware/Tavern/Storeroom/#{name}"
+        PACKAGE: "#{$taverndir}/Storeroom/#{name}"
       }
     }
 
@@ -25,13 +26,19 @@ module KegParser
     return line
   end
 
-  # parse information from a Kegfile
+  # parse from an existing file
   def self.parseFile(filepath, os)
+    raw = File.open(filepath)
+    outcome = self.parse(raw.read, os)
+    raw.close
+    return outcome
+  end
+
+  # parse information from a Kegfile
+  def self.parse(content, os)
     kegdata = Hash.new
     openblock = 0
-    raw = File.open(filepath)
-    lines = raw.read.split("\n")
-    raw.close
+    lines = content.split("\n")
 
     lines.each do |line|
       # remove excess whitespace from each line
@@ -168,8 +175,8 @@ module KegExecutor
     end
   end
 
-  def self.run(commandlist, os)
-    commandlist.each do |cmd|
+  def self.run(package, commandlist, os)
+    package[commandlist].each do |cmd|
       if cmd[0] == "exec"
         self._exec(cmd.drop(1).join(" "))
       elsif cmd[0] == "remove"
@@ -185,13 +192,10 @@ module KegExecutor
       elsif cmd[0] == "copy"
         self._copy(cmd[1], cmd[2])
       elsif cmd[0] == "link"
-        self._link(cmd[1], cmd[2], cmd[3], cmd[4], os)
+        self._link(package[:name], cmd[1], cmd[2], cmd[3], os)
       elsif cmd[0] == "unlink"
         self._unlink(cmd[1], os)
       end
     end
   end
 end
-
-outcome = KegParser.parseFile("samplekeg.kegfile", "win")
-KegExecutor.run(outcome[:install], "win")
