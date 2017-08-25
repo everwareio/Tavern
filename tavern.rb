@@ -17,12 +17,6 @@ elsif ARGV[0] == "update"
   Core.update(ARGV[1], Config.get('thisuri'), Config.get('os'))
 elsif ARGV[0] == "info"
   Core.info(Config.get('os'))
-elsif ARGV[0] == "config"
-  if ARGV[1] == "set"
-    Config.set(ARGV[2], ARGV[3])
-  elsif ARGV[1] == "get"
-    puts Config.get(ARGV[2])
-  end
 elsif ARGV[0] == "tap"
   if ARGV[1] == "add"
     Config.set("tapnames", Config.get("tapnames") + "," + ARGV[2])

@@ -1,38 +1,61 @@
 # Tavern
-Tavern is a cross platform package manager designed with organizations in mind. Any organization or entity can host their own library that people can fetch packages from. Tavern is implemented in Ruby but has wrappers for Windows and OSX to allow for the seamless running of the application.
 
-### How it works
-You install packages by running
-```
-$ tavern install <package_name>
-```
+Tavern is a cross platform package mananger that allows for organizations large and small to maintain a library of packages that can be downloaded at any time. Tavern is written in Ruby and tries to remain as lightweight as possible.
 
-You can uninstall them using
-```
-$ tavern uninstall <package_name>
+The packages one installs with Tavern are called Kegs. These are a collection of information about the package itself, as well as series of instructions on how to install and uninstall the package. Having the packages work like this allows for maximum flexibility for the maintainers of these works, and means they have the power to perform large, complex installs without having to bother the user beyond entering the tavern install command.
+
+Installing a package with Tavern is simple:
+
+``` shell
+tavern install <package_name>
 ```
 
-Tavern will search its library for a package with that name, and matching your operating system; and when found, attempt to install it, as instructed by the author.
+To remove a package from your system simple run:
 
-### Configuration
-The most critical file for Tavern is the `.tavernconfig` file. From it you can set the variables you need to make your Tavern client tick. To set or get settings in your instance of Tavern, use the 'config' command set:
+``` shell
+tavern uninstall <package_name>
+```
 
-`tavern config set <setting> <value>` will set the value of the specified setting to the given value
+Updating a package to a new version is easy:
 
-`tavern config get <setting>` will print the current value of the setting
+``` shell
+tavern update <package_name>
+```
 
-### Taps
-Taps represent the libraries of packages that Tavern can pull from. You can have as many taps as you want, and swap between them quickly. These taps are simply different URL's your Tavern instance looks for packages in and downloads them from. To interact with taps, use the 'tap' command set:
+## Taps
 
-`tavern tap add <name> <url>` will add a tap to Tavern with the given name, and url.
+Taps represent the libraries of Kegs that your Tavern instance can pull data from. Each Tap has a name, and a URL that it links to. Tavern can hold as many taps as you want, but will only search in one to download and install pacakges; this is the Tap your are 'pouring' from.
 
-`tavern tap remove <name>` will remove the named tap from Tavern
+By default, all Tavern instances come with the EverwareIO tap preinstalled and set by default. To add a tap, execute this from your command line:
 
-`tavern tap pour <name>` will make the named tap the one that Tavern pulls from and attempts to download files from
+``` shell
+tavern tap add <tap_name> <url>
+```
 
-`tavern tap list` will list all the taps you have added to Tavern (with the URL's)
+To change the tap being used:
 
-### Other commands
-`tavern update <package_name>` will check if the keg stored in the library has a different version to the one installed locally, and if it does, will remove and reinstall the new one.
+``` shell
+tavern tap pour <tap_name>
+```
 
-`tavern info` will list all the installed packages.
+Anyone can host a library, and give out the url to be tapped by Tavern instances. However over time, you may collect a large number of taps in Tavern, and want to see all of them. To do so, use the `list` command:
+
+``` shell
+tavern tap list
+```
+
+This will list all the taps you've added and also show their URLS. To remove a tap that you no longer need:
+
+``` shell
+tavern tap remove <tap_name>
+```
+
+To double check what tap you are currently using:
+
+``` shell
+tavern tap current
+```
+
+## Other Commands
+
+`tavern info` will list all the package you have currently installed.
