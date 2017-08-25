@@ -14,11 +14,6 @@ $ tavern uninstall <package_name>
 
 Tavern will search its library for a package with that name, and matching your operating system; and when found, attempt to install it, as instructed by the author.
 
-Packages can so be installed locally, by adding the `-l` flag at the end of the install command. Note that the flag MUST be at the end, like so:
-```
-$ tavern install <package_name> -l
-```
-
 ### Configuration
 The most critical file for Tavern is the `.tavernconfig` file. From it you can set the variables you need to make your Tavern client tick. To set or get settings in your instance of Tavern, use the 'config' command set:
 
@@ -40,4 +35,4 @@ Taps represent the libraries of packages that Tavern can pull from. You can have
 ### Other commands
 `tavern update <package_name>` will check if the keg stored in the library has a different version to the one installed locally, and if it does, will remove and reinstall the new one.
 
-`tavern info` will list all the installed packages and their versions.
+`tavern info` will list all the installed packages.
