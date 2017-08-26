@@ -13,8 +13,8 @@ module KegParser
         PACKAGE: "#{$taverndir}/Storeroom/#{name}"
       },
       darwin: {
-        HOME: "~",
-        EVERWARE: "~/everware",
+        HOME: "#{Dir.home}",
+        EVERWARE: "#{Dir.home}/everwareio",
         PACKAGE: "#{$taverndir}/Storeroom/#{name}"
       }
     }
@@ -159,10 +159,10 @@ module KegExecutor
       link << command
       link.close
     elsif os == "darwin"
-      link = File.open("~/everware/bin/#{name}.sh", "w+")
+      link = File.open("#{Dir.home}/everwareio/bin/#{name}", "w+")
       link << command
       link.close
-      FileUtils.chmod("a=wrx", "~/everware/bin/#{name}.sh")
+      system "chmod +x #{Dir.home}/everwareio/bin/#{name}"
     end
   end
 
@@ -171,7 +171,7 @@ module KegExecutor
     if os == "win"
       self._remove("C:/EverwareIO/bin/#{name}.bat")
     elsif os == "darwin"
-      self._remove("~/everware/bin/#{name}.sh")
+      self._remove("#{Dir.home}/everwareio/bin/#{name}.sh")
     end
   end
 
@@ -199,3 +199,4 @@ module KegExecutor
     end
   end
 end
+
