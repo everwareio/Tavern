@@ -59,3 +59,7 @@ tavern tap current
 ## Other Commands
 
 `tavern info` will list all the package you have currently installed.
+
+## Creating Packages (kegs)
+
+For info on how to create your own packages, look at `creatingpackages.md` for instructions.
