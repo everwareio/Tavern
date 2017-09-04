@@ -143,15 +143,23 @@ module KegExecutor
   # $link command
   def self._link(name, path, argc, executor, os)
     command = "#{executor} #{path} "
-    count = 1
-    while count <= argc.to_i do
+    if argc == "any"
       if os == "win"
-        command += "%#{count}"
-        command = "@echo off\n" + command
+        command += "%*"
       elsif os == "darwin"
-        command += "$#{count}"
+        command += '"$@"'
       end
-      count += 1
+    else
+      count = 1
+      while count <= argc.to_i do
+        if os == "win"
+          command += "%#{count}"
+          command = "@echo off\n" + command
+        elsif os == "darwin"
+          command += "$#{count}"
+        end
+        count += 1
+      end
     end
 
     if os == "win"
@@ -171,7 +179,7 @@ module KegExecutor
     if os == "win"
       self._remove("C:/EverwareIO/bin/#{name}.bat")
     elsif os == "darwin"
-      self._remove("#{Dir.home}/everwareio/bin/#{name}.sh")
+      self._remove("#{Dir.home}/everwareio/bin/#{name}")
     end
   end
 
